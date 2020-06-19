@@ -1,12 +1,15 @@
 package main
 
 import (
+	d "first/app/models"
+	routes "first/app/routes"
+	util "first/app/utils"
 	"fmt"
 	"log"
 	"net/http"
 	"strconv"
 	"time"
-  "github.com/richardfordjunior/first"
+
 	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
 )
@@ -64,12 +67,12 @@ func main() {
 	}
 
 	//var err error
-	port := GetEnvVariable("PORT")
+	port := util.GetEnvVariable("PORT")
 	curTime := time.Now()
 	apiRouter := mux.NewRouter()
 	api := apiRouter.PathPrefix("/api").Subrouter()
 	// Connect to db
-	db := InitPostgresDB()
+	db := d.InitPostgresDB()
 	sqlStatement := `SELECT fname, email FROM users`
 	var user User
 	// Replace 3 with an ID from your database or another random
@@ -111,7 +114,7 @@ func main() {
 	// api.HandleFunc("", post).Methods(http.MethodPost)
 	// api.HandleFunc("", put).Methods(http.MethodPut)
 	// api.HandleFunc("", delete).Methods(http.MethodDelete)
-	api.HandleFunc("/itunes/{name}", GetItunesUserByName).Methods(http.MethodGet)
+	api.HandleFunc("/itunes/{name}", routes.GetItunesUserByName).Methods(http.MethodGet)
 	api.HandleFunc("/user/{userID}", params).Methods(http.MethodGet)
 
 	//for key, element := range os.Environ() {
