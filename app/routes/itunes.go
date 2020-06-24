@@ -4,6 +4,7 @@ import (
 	util "first/app/utils"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -21,7 +22,11 @@ func GetItunesUserByName(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		http.Error(w, err.Error(), http.StatusBadRequest)
 	} else {
-		data, _ := ioutil.ReadAll(response.Body)
-		util.APIResponse(w, data)
+		data, error := ioutil.ReadAll(response.Body)
+		if error == nil {
+			util.APIResponse(w, data)
+		} else {
+			log.Fatal("Error reading response")
+		}
 	}
 }
